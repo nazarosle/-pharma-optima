@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>Pharma Optima</title>
+
+  <link rel="stylesheet" href="style.css"/>
+
+  <!-- ICONS -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+  />
+
+  <!-- CHART -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+  <!-- MOBILE BUTTON -->
+
+  <button class="menu-toggle" id="menuToggle">
+    <i class="fa-solid fa-bars"></i>
+  </button>
+
+  <!-- SIDEBAR -->
+
+  <aside class="sidebar" id="sidebar">
+
+    <!-- LOGO -->
+
+    <div class="logo">
+
+      <img
+        src="logo.jpg"
+        alt="logo"
+      />
+
+    </div>
+
+    <!-- MENU -->
+
+    <nav>
+
+      <a href="#">
+        <i class="fa-solid fa-chart-line"></i>
+        Dashboard
+      </a>
+
+      <a href="#">
+        <i class="fa-solid fa-boxes-stacked"></i>
+        Estoque
+      </a>
+
+      <a href="#">
+        <i class="fa-solid fa-chart-pie"></i>
+        Relatórios
+      </a>
+
+      <a href="#">
+        <i class="fa-solid fa-bullseye"></i>
+        Metas
+      </a>
+
+      <a href="#">
+        <i class="fa-solid fa-users"></i>
+        Funcionários
+      </a>
+
+      <a href="#">
+        <i class="fa-solid fa-gear"></i>
+        Configurações
+      </a>
+
+    </nav>
+
+  </aside>
+
+  <!-- CONTAINER -->
+
+  <main class="container">
+
+    <!-- NAVBAR -->
+
+    <header class="navbar">
+
+      <!-- SEARCH -->
+
+      <div class="search-box">
+
+        <i class="fa-solid fa-magnifying-glass"></i>
+
+        <input
+          type="text"
+          placeholder="Pesquisar medicamentos, relatórios..."
+        />
+
+      </div>
+
+      <!-- RIGHT -->
+
+      <div class="nav-right">
+
+        <!-- CLOCK -->
+
+        <div class="clock" id="clock">
+          00:00
+        </div>
+
+        <!-- NOTIFICATION -->
+
+        <div class="notification">
+
+          <i class="fa-solid fa-bell"></i>
+
+          <span>3</span>
+
+        </div>
+
+        <!-- DARK MODE -->
+
+        <button id="themeBtn">
+          🌙
+        </button>
+
+        <!-- PROFILE -->
+
+        <div class="profile">
+
+          <img
+            src="manja.jpg"
+            alt="perfil"
+          />
+
+          <div class="profile-info">
+            <span>Administrador</span>
+            <small>Pharma Optima</small>
+          </div>
+
+        </div>
+
+      </div>
+
+    </header>
+
+    <!-- CARDS -->
+
+    <section class="cards">
+
+      <div class="card">
+
+        <div class="card-icon">
+          <i class="fa-solid fa-pills"></i>
+        </div>
+
+        <h3>Produtos</h3>
+
+        <p>1.240</p>
+
+      </div>
+
+      <div class="card">
+
+        <div class="card-icon">
+          <i class="fa-solid fa-chart-line"></i>
+        </div>
+
+        <h3>Crescimento</h3>
+
+        <p>+12%</p>
+
+      </div>
+
+      <div class="card">
+
+        <div class="card-icon">
+          <i class="fa-solid fa-industry"></i>
+        </div>
+
+        <h3>Produção</h3>
+
+        <p>84%</p>
+
+      </div>
+
+      <div class="card">
+
+        <div class="card-icon">
+          <i class="fa-solid fa-users"></i>
+        </div>
+
+        <h3>Funcionários</h3>
+
+        <p>5.200</p>
+
+      </div>
+
+    </section>
+
+    <!-- CHARTS -->
+
+    <section class="charts">
+
+      <div class="chart-card">
+
+        <div class="chart-header">
+
+          <h3>Produção Mensal</h3>
+
+          <span>2025</span>
+
+        </div>
+
+        <div class="chart-container">
+          <canvas id="lineChart"></canvas>
+        </div>
+
+      </div>
+
+      <div class="chart-card">
+
+        <div class="chart-header">
+
+          <h3>Distribuição</h3>
+
+          <span>Atual</span>
+
+        </div>
+
+        <div class="chart-container">
+          <canvas id="pieChart"></canvas>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- PROGRESS -->
+
+    <section class="progress-section">
+
+      <div class="progress-card">
+
+        <div class="progress-title">
+          <span>Farmacêutico</span>
+          <span>80%</span>
+        </div>
+
+        <div class="progress-bar">
+          <div style="width:80%"></div>
+        </div>
+
+      </div>
+
+      <div class="progress-card">
+
+        <div class="progress-title">
+          <span>Pesquisa</span>
+          <span>60%</span>
+        </div>
+
+        <div class="progress-bar">
+          <div style="width:60%"></div>
+        </div>
+
+      </div>
+
+      <div class="progress-card">
+
+        <div class="progress-title">
+          <span>Produção</span>
+          <span>90%</span>
+        </div>
+
+        <div class="progress-bar">
+          <div style="width:90%"></div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- TABLE -->
+
+    <section class="table-card">
+
+      <div class="table-header">
+
+        <h3>Estoque Atual</h3>
+
+        <button>
+          Ver tudo
+        </button>
+
+      </div>
+
+      <table>
+
+        <thead>
+
+          <tr>
+            <th>Produto</th>
+            <th>Status</th>
+            <th>Crescimento</th>
+          </tr>
+
+        </thead>
+
+        <tbody>
+
+          <tr>
+            <td>Dipirona</td>
+            <td class="green">Ativo</td>
+            <td>+12%</td>
+          </tr>
+
+          <tr>
+            <td>Vitamina C</td>
+            <td class="blue">Alto</td>
+            <td>+18%</td>
+          </tr>
+
+          <tr>
+            <td>Ibuprofeno</td>
+            <td class="orange">Médio</td>
+            <td>+7%</td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </section>
+
+  </main>
+
+  <script src="script.js"></script>
+
+</body>
+
+</html>
