@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-  <title>Pharma Optima | Dashboard</title>
+  <title>Pharma Optima | Metas</title>
 
   <link rel="stylesheet" href="style.css"/>
 
@@ -75,9 +75,9 @@
 
     <header class="navbar">
 
-      <div class="search-box">
-        <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" placeholder="Pesquisar medicamentos, relatórios..." />
+      <div class="page-title">
+        <h1>Metas</h1>
+        <p>Objetivos de produção, vendas e qualidade</p>
       </div>
 
       <div class="nav-right">
@@ -103,85 +103,47 @@
 
     </header>
 
-    <!-- CARDS -->
+    <!-- SUMMARY CARDS -->
 
     <section class="cards">
 
       <div class="card">
-        <div class="card-icon"><i class="fa-solid fa-pills"></i></div>
-        <h3>Produtos</h3>
-        <p>1.240</p>
-        <span class="trend">
-          <i class="fa-solid fa-arrow-trend-up"></i>
-          +4% este mês
-        </span>
+        <div class="card-icon"><i class="fa-solid fa-bullseye"></i></div>
+        <h3>Metas ativas</h3>
+        <p>9</p>
       </div>
 
       <div class="card">
-        <div class="card-icon"><i class="fa-solid fa-chart-line"></i></div>
-        <h3>Crescimento</h3>
-        <p>+12%</p>
-        <span class="trend">
-          <i class="fa-solid fa-arrow-trend-up"></i>
-          vs. mês anterior
-        </span>
+        <div class="card-icon"><i class="fa-solid fa-flag-checkered"></i></div>
+        <h3>Concluídas no trimestre</h3>
+        <p>5</p>
       </div>
 
       <div class="card">
-        <div class="card-icon"><i class="fa-solid fa-industry"></i></div>
-        <h3>Produção</h3>
-        <p>84%</p>
-        <span class="trend">
-          <i class="fa-solid fa-arrow-trend-up"></i>
-          da capacidade
-        </span>
+        <div class="card-icon"><i class="fa-solid fa-hourglass-half"></i></div>
+        <h3>Em andamento</h3>
+        <p>4</p>
       </div>
 
       <div class="card">
-        <div class="card-icon"><i class="fa-solid fa-users"></i></div>
-        <h3>Funcionários</h3>
-        <p>5.200</p>
+        <div class="card-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+        <h3>Atrasadas</h3>
+        <p>1</p>
         <span class="trend down">
           <i class="fa-solid fa-arrow-trend-down"></i>
-          -1% este mês
+          precisa de atenção
         </span>
       </div>
 
     </section>
 
-    <!-- CHARTS -->
-
-    <section class="charts">
-
-      <div class="chart-card">
-        <div class="chart-header">
-          <h3>Produção Mensal</h3>
-          <span>2025</span>
-        </div>
-        <div class="chart-container">
-          <canvas id="lineChart"></canvas>
-        </div>
-      </div>
-
-      <div class="chart-card">
-        <div class="chart-header">
-          <h3>Distribuição</h3>
-          <span>Atual</span>
-        </div>
-        <div class="chart-container">
-          <canvas id="pieChart"></canvas>
-        </div>
-      </div>
-
-    </section>
-
-    <!-- PROGRESS -->
+    <!-- GOALS -->
 
     <section class="progress-section">
 
       <div class="progress-card">
         <div class="progress-title">
-          <span>Farmacêutico</span>
+          <span>Reduzir perdas de produção para 3%</span>
           <span>80%</span>
         </div>
         <div class="progress-bar">
@@ -191,17 +153,37 @@
 
       <div class="progress-card">
         <div class="progress-title">
-          <span>Pesquisa</span>
-          <span>60%</span>
+          <span>Aumentar faturamento trimestral em 15%</span>
+          <span>62%</span>
         </div>
         <div class="progress-bar">
-          <div style="width:60%"></div>
+          <div style="width:62%"></div>
         </div>
       </div>
 
       <div class="progress-card">
         <div class="progress-title">
-          <span>Produção</span>
+          <span>Certificar nova linha de produção (ISO 9001)</span>
+          <span>45%</span>
+        </div>
+        <div class="progress-bar">
+          <div style="width:45%"></div>
+        </div>
+      </div>
+
+      <div class="progress-card">
+        <div class="progress-title">
+          <span>Zerar rupturas de estoque em antibióticos</span>
+          <span>28%</span>
+        </div>
+        <div class="progress-bar">
+          <div style="width:28%"></div>
+        </div>
+      </div>
+
+      <div class="progress-card">
+        <div class="progress-title">
+          <span>Treinar 100% da equipe em boas práticas de fabricação</span>
           <span>90%</span>
         </div>
         <div class="progress-bar">
@@ -216,9 +198,10 @@
     <section class="table-card">
 
       <div class="table-header">
-        <h3>Estoque Atual</h3>
-        <button onclick="window.location.href='estoque.html'">
-          Ver tudo
+        <h3>Detalhamento das metas</h3>
+        <button>
+          <i class="fa-solid fa-plus"></i>
+          Nova meta
         </button>
       </div>
 
@@ -226,30 +209,54 @@
 
         <thead>
           <tr>
-            <th>Produto</th>
+            <th>Meta</th>
+            <th>Responsável</th>
+            <th>Prazo</th>
+            <th>Progresso</th>
             <th>Status</th>
-            <th>Crescimento</th>
           </tr>
         </thead>
 
         <tbody>
 
-          <tr>
-            <td>Dipirona</td>
-            <td><span class="pill blue">Alto</span></td>
-            <td>+12%</td>
+          <tr data-status="andamento">
+            <td>Reduzir perdas de produção</td>
+            <td>Carlos Menezes</td>
+            <td>30/09/2026</td>
+            <td>80%</td>
+            <td><span class="pill blue">Em andamento</span></td>
           </tr>
 
-          <tr>
-            <td>Vitamina C</td>
-            <td><span class="pill blue">Alto</span></td>
-            <td>+18%</td>
+          <tr data-status="andamento">
+            <td>Aumentar faturamento trimestral</td>
+            <td>Fernanda Reis</td>
+            <td>15/10/2026</td>
+            <td>62%</td>
+            <td><span class="pill blue">Em andamento</span></td>
           </tr>
 
-          <tr>
-            <td>Ibuprofeno</td>
-            <td><span class="pill orange">Médio</span></td>
-            <td>+7%</td>
+          <tr data-status="atrasado">
+            <td>Certificação ISO 9001</td>
+            <td>Paulo Andrade</td>
+            <td>20/09/2026</td>
+            <td>45%</td>
+            <td><span class="pill red">Atrasada</span></td>
+          </tr>
+
+          <tr data-status="andamento">
+            <td>Zerar rupturas de antibióticos</td>
+            <td>Juliana Prado</td>
+            <td>01/11/2026</td>
+            <td>28%</td>
+            <td><span class="pill orange">Atenção</span></td>
+          </tr>
+
+          <tr data-status="concluido">
+            <td>Treinamento em boas práticas</td>
+            <td>Ricardo Lima</td>
+            <td>10/09/2026</td>
+            <td>90%</td>
+            <td><span class="pill green">Quase lá</span></td>
           </tr>
 
         </tbody>

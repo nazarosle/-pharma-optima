@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>Pharma Optima | Estoque</title>
+
+  <link rel="stylesheet" href="style.css"/>
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+  />
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+  <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu">
+    <i class="fa-solid fa-bars"></i>
+  </button>
+
+  <!-- SIDEBAR -->
+
+  <aside class="sidebar" id="sidebar">
+
+    <div class="logo">
+      <img src="logo.jpg" alt="Pharma Optima" />
+    </div>
+
+    <nav>
+
+      <a href="index.html" data-page="dashboard">
+        <i class="fa-solid fa-chart-line"></i>
+        Dashboard
+      </a>
+
+      <a href="estoque.html" data-page="estoque">
+        <i class="fa-solid fa-boxes-stacked"></i>
+        Estoque
+      </a>
+
+      <a href="relatorios.html" data-page="relatorios">
+        <i class="fa-solid fa-chart-pie"></i>
+        Relatórios
+      </a>
+
+      <a href="metas.html" data-page="metas">
+        <i class="fa-solid fa-bullseye"></i>
+        Metas
+      </a>
+
+      <a href="funcionarios.html" data-page="funcionarios">
+        <i class="fa-solid fa-users"></i>
+        Funcionários
+      </a>
+
+      <a href="configuracoes.html" data-page="configuracoes">
+        <i class="fa-solid fa-gear"></i>
+        Configurações
+      </a>
+
+    </nav>
+
+  </aside>
+
+  <!-- CONTAINER -->
+
+  <main class="container">
+
+    <!-- NAVBAR -->
+
+    <header class="navbar">
+
+      <div class="page-title">
+        <h1>Estoque</h1>
+        <p>Controle de medicamentos, lotes e validade</p>
+      </div>
+
+      <div class="nav-right">
+
+        <div class="clock" id="clock">00:00</div>
+
+        <div class="notification">
+          <i class="fa-solid fa-bell"></i>
+          <span>3</span>
+        </div>
+
+        <button id="themeBtn" aria-label="Alternar tema claro/escuro">🌙</button>
+
+        <div class="profile">
+          <img src="manja.jpg" alt="Foto do administrador" />
+          <div class="profile-info">
+            <span>Administrador</span>
+            <small>Pharma Optima</small>
+          </div>
+        </div>
+
+      </div>
+
+    </header>
+
+    <!-- SUMMARY CARDS -->
+
+    <section class="cards">
+
+      <div class="card">
+        <div class="card-icon"><i class="fa-solid fa-boxes-stacked"></i></div>
+        <h3>Itens em estoque</h3>
+        <p>1.240</p>
+      </div>
+
+      <div class="card">
+        <div class="card-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+        <h3>Estoque baixo</h3>
+        <p>18</p>
+        <span class="trend down">
+          <i class="fa-solid fa-arrow-trend-up"></i>
+          requer atenção
+        </span>
+      </div>
+
+      <div class="card">
+        <div class="card-icon"><i class="fa-solid fa-calendar-xmark"></i></div>
+        <h3>Vencendo em 30 dias</h3>
+        <p>7</p>
+      </div>
+
+      <div class="card">
+        <div class="card-icon"><i class="fa-solid fa-ban"></i></div>
+        <h3>Fora de estoque</h3>
+        <p>3</p>
+      </div>
+
+    </section>
+
+    <!-- FILTERS -->
+
+    <div class="filter-bar">
+
+      <div class="search-box">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="tableSearch" placeholder="Buscar por produto ou lote..." />
+      </div>
+
+      <select id="statusFilter">
+        <option value="all">Todos os status</option>
+        <option value="alto">Alto</option>
+        <option value="medio">Médio</option>
+        <option value="baixo">Baixo</option>
+        <option value="esgotado">Esgotado</option>
+      </select>
+
+      <select>
+        <option>Todas as categorias</option>
+        <option>Analgésicos</option>
+        <option>Vitaminas</option>
+        <option>Anti-inflamatórios</option>
+        <option>Antibióticos</option>
+      </select>
+
+    </div>
+
+    <!-- TABLE -->
+
+    <section class="table-card">
+
+      <div class="table-header">
+        <h3>Todos os produtos</h3>
+        <button>
+          <i class="fa-solid fa-plus"></i>
+          Novo produto
+        </button>
+      </div>
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>Produto</th>
+            <th>Categoria</th>
+            <th>Lote</th>
+            <th>Validade</th>
+            <th>Quantidade</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr data-status="alto">
+            <td>Dipirona 500mg</td>
+            <td>Analgésicos</td>
+            <td>L2024-118</td>
+            <td>03/2027</td>
+            <td>3.400 un</td>
+            <td><span class="pill blue">Alto</span></td>
+            <td>
+              <div class="row-actions">
+                <button aria-label="Editar"><i class="fa-solid fa-pen"></i></button>
+                <button aria-label="Excluir"><i class="fa-solid fa-trash"></i></button>
+              </div>
+            </td>
+          </tr>
+
+          <tr data-status="alto">
+            <td>Vitamina C 1g</td>
+            <td>Vitaminas</td>
+            <td>L2024-204</td>
+            <td>11/2026</td>
+            <td>2.150 un</td>
+            <td><span class="pill blue">Alto</span></td>
+            <td>
+              <div class="row-actions">
+                <button aria-label="Editar"><i class="fa-solid fa-pen"></i></button>
+                <button aria-label="Excluir"><i class="fa-solid fa-trash"></i></button>
+              </div>
+            </td>
+          </tr>
+
+          <tr data-status="medio">
+            <td>Ibuprofeno 400mg</td>
+            <td>Anti-inflamatórios</td>
+            <td>L2024-097</td>
+            <td>09/2026</td>
+            <td>860 un</td>
+            <td><span class="pill orange">Médio</span></td>
+            <td>
+              <div class="row-actions">
+                <button aria-label="Editar"><i class="fa-solid fa-pen"></i></button>
+                <button aria-label="Excluir"><i class="fa-solid fa-trash"></i></button>
+              </div>
+            </td>
+          </tr>
+
+          <tr data-status="baixo">
+            <td>Amoxicilina 500mg</td>
+            <td>Antibióticos</td>
+            <td>L2024-055</td>
+            <td>09/2026</td>
+            <td>140 un</td>
+            <td><span class="pill red">Baixo</span></td>
+            <td>
+              <div class="row-actions">
+                <button aria-label="Editar"><i class="fa-solid fa-pen"></i></button>
+                <button aria-label="Excluir"><i class="fa-solid fa-trash"></i></button>
+              </div>
+            </td>
+          </tr>
+
+          <tr data-status="esgotado">
+            <td>Paracetamol 750mg</td>
+            <td>Analgésicos</td>
+            <td>L2023-311</td>
+            <td>06/2026</td>
+            <td>0 un</td>
+            <td><span class="pill red">Esgotado</span></td>
+            <td>
+              <div class="row-actions">
+                <button aria-label="Editar"><i class="fa-solid fa-pen"></i></button>
+                <button aria-label="Excluir"><i class="fa-solid fa-trash"></i></button>
+              </div>
+            </td>
+          </tr>
+
+          <tr data-status="medio">
+            <td>Loratadina 10mg</td>
+            <td>Antialérgicos</td>
+            <td>L2024-142</td>
+            <td>01/2027</td>
+            <td>720 un</td>
+            <td><span class="pill orange">Médio</span></td>
+            <td>
+              <div class="row-actions">
+                <button aria-label="Editar"><i class="fa-solid fa-pen"></i></button>
+                <button aria-label="Excluir"><i class="fa-solid fa-trash"></i></button>
+              </div>
+            </td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
+      <div class="pagination">
+        <span>Página 1 de 4</span>
+        <button aria-label="Página anterior"><i class="fa-solid fa-chevron-left"></i></button>
+        <button class="active">1</button>
+        <button>2</button>
+        <button>3</button>
+        <button aria-label="Próxima página"><i class="fa-solid fa-chevron-right"></i></button>
+      </div>
+
+    </section>
+
+  </main>
+
+  <script src="script.js"></script>
+
+</body>
+
+</html>

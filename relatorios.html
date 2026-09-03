@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>Pharma Optima | Relatórios</title>
+
+  <link rel="stylesheet" href="style.css"/>
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+  />
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+  <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu">
+    <i class="fa-solid fa-bars"></i>
+  </button>
+
+  <!-- SIDEBAR -->
+
+  <aside class="sidebar" id="sidebar">
+
+    <div class="logo">
+      <img src="logo.jpg" alt="Pharma Optima" />
+    </div>
+
+    <nav>
+
+      <a href="index.html" data-page="dashboard">
+        <i class="fa-solid fa-chart-line"></i>
+        Dashboard
+      </a>
+
+      <a href="estoque.html" data-page="estoque">
+        <i class="fa-solid fa-boxes-stacked"></i>
+        Estoque
+      </a>
+
+      <a href="relatorios.html" data-page="relatorios">
+        <i class="fa-solid fa-chart-pie"></i>
+        Relatórios
+      </a>
+
+      <a href="metas.html" data-page="metas">
+        <i class="fa-solid fa-bullseye"></i>
+        Metas
+      </a>
+
+      <a href="funcionarios.html" data-page="funcionarios">
+        <i class="fa-solid fa-users"></i>
+        Funcionários
+      </a>
+
+      <a href="configuracoes.html" data-page="configuracoes">
+        <i class="fa-solid fa-gear"></i>
+        Configurações
+      </a>
+
+    </nav>
+
+  </aside>
+
+  <!-- CONTAINER -->
+
+  <main class="container">
+
+    <!-- NAVBAR -->
+
+    <header class="navbar">
+
+      <div class="page-title">
+        <h1>Relatórios</h1>
+        <p>Análises de produção, vendas e conformidade</p>
+      </div>
+
+      <div class="nav-right">
+
+        <div class="clock" id="clock">00:00</div>
+
+        <div class="notification">
+          <i class="fa-solid fa-bell"></i>
+          <span>3</span>
+        </div>
+
+        <button id="themeBtn" aria-label="Alternar tema claro/escuro">🌙</button>
+
+        <div class="profile">
+          <img src="manja.jpg" alt="Foto do administrador" />
+          <div class="profile-info">
+            <span>Administrador</span>
+            <small>Pharma Optima</small>
+          </div>
+        </div>
+
+      </div>
+
+    </header>
+
+    <!-- SUMMARY CARDS -->
+
+    <section class="cards">
+
+      <div class="card">
+        <div class="card-icon"><i class="fa-solid fa-file-lines"></i></div>
+        <h3>Relatórios gerados</h3>
+        <p>142</p>
+      </div>
+
+      <div class="card">
+        <div class="card-icon"><i class="fa-solid fa-sack-dollar"></i></div>
+        <h3>Faturamento no mês</h3>
+        <p>R$ 486k</p>
+        <span class="trend">
+          <i class="fa-solid fa-arrow-trend-up"></i>
+          +9% vs. anterior
+        </span>
+      </div>
+
+      <div class="card">
+        <div class="card-icon"><i class="fa-solid fa-shield-halved"></i></div>
+        <h3>Conformidade</h3>
+        <p>98%</p>
+      </div>
+
+      <div class="card">
+        <div class="card-icon"><i class="fa-solid fa-truck-fast"></i></div>
+        <h3>Entregas no prazo</h3>
+        <p>91%</p>
+        <span class="trend down">
+          <i class="fa-solid fa-arrow-trend-down"></i>
+          -2% vs. anterior
+        </span>
+      </div>
+
+    </section>
+
+    <!-- CHARTS -->
+
+    <section class="charts">
+
+      <div class="chart-card">
+        <div class="chart-header">
+          <h3>Faturamento por Mês</h3>
+          <span>2025</span>
+        </div>
+        <div class="chart-container">
+          <canvas id="revenueChart"></canvas>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-header">
+          <h3>Vendas por Categoria</h3>
+          <span>Atual</span>
+        </div>
+        <div class="chart-container">
+          <canvas id="categoryChart"></canvas>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- FILTERS -->
+
+    <div class="filter-bar">
+
+      <div class="search-box">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="tableSearch" placeholder="Buscar relatório..." />
+      </div>
+
+      <select id="statusFilter">
+        <option value="all">Todos os tipos</option>
+        <option value="financeiro">Financeiro</option>
+        <option value="producao">Produção</option>
+        <option value="conformidade">Conformidade</option>
+      </select>
+
+      <select>
+        <option>Últimos 30 dias</option>
+        <option>Últimos 90 dias</option>
+        <option>Este ano</option>
+      </select>
+
+    </div>
+
+    <!-- TABLE -->
+
+    <section class="table-card">
+
+      <div class="table-header">
+        <h3>Relatórios recentes</h3>
+        <button>
+          <i class="fa-solid fa-plus"></i>
+          Gerar relatório
+        </button>
+      </div>
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>Relatório</th>
+            <th>Tipo</th>
+            <th>Período</th>
+            <th>Gerado em</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr data-status="financeiro">
+            <td>Faturamento Mensal</td>
+            <td>Financeiro</td>
+            <td>Ago/2026</td>
+            <td>01/09/2026</td>
+            <td><span class="pill green">Concluído</span></td>
+            <td>
+              <div class="row-actions">
+                <button aria-label="Baixar"><i class="fa-solid fa-download"></i></button>
+                <button aria-label="Visualizar"><i class="fa-solid fa-eye"></i></button>
+              </div>
+            </td>
+          </tr>
+
+          <tr data-status="producao">
+            <td>Eficiência de Produção</td>
+            <td>Produção</td>
+            <td>Ago/2026</td>
+            <td>30/08/2026</td>
+            <td><span class="pill green">Concluído</span></td>
+            <td>
+              <div class="row-actions">
+                <button aria-label="Baixar"><i class="fa-solid fa-download"></i></button>
+                <button aria-label="Visualizar"><i class="fa-solid fa-eye"></i></button>
+              </div>
+            </td>
+          </tr>
+
+          <tr data-status="conformidade">
+            <td>Auditoria de Conformidade</td>
+            <td>Conformidade</td>
+            <td>Q3/2026</td>
+            <td>28/08/2026</td>
+            <td><span class="pill orange">Em revisão</span></td>
+            <td>
+              <div class="row-actions">
+                <button aria-label="Baixar"><i class="fa-solid fa-download"></i></button>
+                <button aria-label="Visualizar"><i class="fa-solid fa-eye"></i></button>
+              </div>
+            </td>
+          </tr>
+
+          <tr data-status="financeiro">
+            <td>Custo por Lote</td>
+            <td>Financeiro</td>
+            <td>Jul/2026</td>
+            <td>05/08/2026</td>
+            <td><span class="pill green">Concluído</span></td>
+            <td>
+              <div class="row-actions">
+                <button aria-label="Baixar"><i class="fa-solid fa-download"></i></button>
+                <button aria-label="Visualizar"><i class="fa-solid fa-eye"></i></button>
+              </div>
+            </td>
+          </tr>
+
+          <tr data-status="producao">
+            <td>Perdas e Descartes</td>
+            <td>Produção</td>
+            <td>Jul/2026</td>
+            <td>03/08/2026</td>
+            <td><span class="pill red">Pendente</span></td>
+            <td>
+              <div class="row-actions">
+                <button aria-label="Baixar"><i class="fa-solid fa-download"></i></button>
+                <button aria-label="Visualizar"><i class="fa-solid fa-eye"></i></button>
+              </div>
+            </td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
+      <div class="pagination">
+        <span>Página 1 de 6</span>
+        <button aria-label="Página anterior"><i class="fa-solid fa-chevron-left"></i></button>
+        <button class="active">1</button>
+        <button>2</button>
+        <button>3</button>
+        <button aria-label="Próxima página"><i class="fa-solid fa-chevron-right"></i></button>
+      </div>
+
+    </section>
+
+  </main>
+
+  <script src="script.js"></script>
+
+  <script>
+    const revenueCtx = document.getElementById("revenueChart");
+    if (revenueCtx) {
+      new Chart(revenueCtx, {
+        type: "bar",
+        data: {
+          labels: ["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago"],
+          datasets: [{
+            label: "Faturamento (R$ mil)",
+            data: [320, 340, 298, 365, 410, 390, 452, 486],
+            backgroundColor: "#0ea5a4",
+            borderRadius: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: { y: { beginAtZero: true } }
+        }
+      });
+    }
+
+    const categoryCtx = document.getElementById("categoryChart");
+    if (categoryCtx) {
+      new Chart(categoryCtx, {
+        type: "doughnut",
+        data: {
+          labels: ["Analgésicos", "Vitaminas", "Antibióticos", "Outros"],
+          datasets: [{
+            data: [38, 24, 21, 17],
+            backgroundColor: ["#0ea5a4", "#0f3b8c", "#22c55e", "#f59e0b"],
+            borderWidth:0
+          }]
+          
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false
+        }
+      });
+    }
+  </script>
+
+</body>
+
+</html>

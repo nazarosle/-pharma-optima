@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>Pharma Optima | Configurações</title>
+
+  <link rel="stylesheet" href="style.css"/>
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+  />
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+  <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu">
+    <i class="fa-solid fa-bars"></i>
+  </button>
+
+  <!-- SIDEBAR -->
+
+  <aside class="sidebar" id="sidebar">
+
+    <div class="logo">
+      <img src="logo.jpg" alt="Pharma Optima" />
+    </div>
+
+    <nav>
+
+      <a href="index.html" data-page="dashboard">
+        <i class="fa-solid fa-chart-line"></i>
+        Dashboard
+      </a>
+
+      <a href="estoque.html" data-page="estoque">
+        <i class="fa-solid fa-boxes-stacked"></i>
+        Estoque
+      </a>
+
+      <a href="relatorios.html" data-page="relatorios">
+        <i class="fa-solid fa-chart-pie"></i>
+        Relatórios
+      </a>
+
+      <a href="metas.html" data-page="metas">
+        <i class="fa-solid fa-bullseye"></i>
+        Metas
+      </a>
+
+      <a href="funcionarios.html" data-page="funcionarios">
+        <i class="fa-solid fa-users"></i>
+        Funcionários
+      </a>
+
+      <a href="configuracoes.html" data-page="configuracoes">
+        <i class="fa-solid fa-gear"></i>
+        Configurações
+      </a>
+
+    </nav>
+
+  </aside>
+
+  <!-- CONTAINER -->
+
+  <main class="container">
+
+    <!-- NAVBAR -->
+
+    <header class="navbar">
+
+      <div class="page-title">
+        <h1>Configurações</h1>
+        <p>Conta, notificações e preferências do sistema</p>
+      </div>
+
+      <div class="nav-right">
+
+        <div class="clock" id="clock">00:00</div>
+
+        <div class="notification">
+          <i class="fa-solid fa-bell"></i>
+          <span>3</span>
+        </div>
+
+        <button id="themeBtn" aria-label="Alternar tema claro/escuro">🌙</button>
+
+        <div class="profile">
+          <img src="manja.jpg" alt="Foto do administrador" />
+          <div class="profile-info">
+            <span>Administrador</span>
+            <small>Pharma Optima</small>
+          </div>
+        </div>
+
+      </div>
+
+    </header>
+
+    <!-- SETTINGS TABS -->
+
+    <div class="settings-tabs">
+      <button class="settings-tab active" data-tab="perfil">Perfil</button>
+      <button class="settings-tab" data-tab="notificacoes">Notificações</button>
+      <button class="settings-tab" data-tab="seguranca">Segurança</button>
+      <button class="settings-tab" data-tab="sistema">Sistema</button>
+    </div>
+
+    <!-- PERFIL -->
+
+    <section class="settings-panel" id="panel-perfil">
+
+      <div class="settings-card">
+
+        <h3>Foto e dados pessoais</h3>
+
+        <div class="settings-profile-row">
+
+          <img src="manja.jpg" alt="Foto do administrador" class="settings-avatar" />
+
+          <div>
+            <button class="btn-secondary">Alterar foto</button>
+            <p class="settings-hint">PNG ou JPG, até 2MB</p>
+          </div>
+
+        </div>
+
+        <div class="settings-grid">
+
+          <label class="settings-field">
+            <span>Nome completo</span>
+            <input type="text" value="Administrador Pharma Optima" />
+          </label>
+
+          <label class="settings-field">
+            <span>E-mail</span>
+            <input type="email" value="admin@pharmaoptima.com" />
+          </label>
+
+          <label class="settings-field">
+            <span>Cargo</span>
+            <input type="text" value="Administrador do sistema" />
+          </label>
+
+          <label class="settings-field">
+            <span>Telefone</span>
+            <input type="tel" value="(11) 99999-0000" />
+          </label>
+
+        </div>
+
+        <div class="settings-actions">
+          <button class="btn-primary">Salvar alterações</button>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- NOTIFICAÇÕES -->
+
+    <section class="settings-panel" id="panel-notificacoes" hidden>
+
+      <div class="settings-card">
+
+        <h3>Preferências de notificação</h3>
+
+        <div class="settings-toggle-row">
+          <div>
+            <strong>Estoque baixo</strong>
+            <p class="settings-hint">Avisar quando um produto atingir o nível mínimo</p>
+          </div>
+          <label class="switch">
+            <input type="checkbox" checked />
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="settings-toggle-row">
+          <div>
+            <strong>Lotes vencendo</strong>
+            <p class="settings-hint">Avisar 30 dias antes do vencimento de um lote</p>
+          </div>
+          <label class="switch">
+            <input type="checkbox" checked />
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="settings-toggle-row">
+          <div>
+            <strong>Relatórios prontos</strong>
+            <p class="settings-hint">Notificar quando um relatório for gerado</p>
+          </div>
+          <label class="switch">
+            <input type="checkbox" />
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="settings-toggle-row">
+          <div>
+            <strong>Metas atrasadas</strong>
+            <p class="settings-hint">Avisar quando uma meta passar do prazo</p>
+          </div>
+          <label class="switch">
+            <input type="checkbox" checked />
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="settings-actions">
+          <button class="btn-primary">Salvar alterações</button>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- SEGURANÇA -->
+
+    <section class="settings-panel" id="panel-seguranca" hidden>
+
+      <div class="settings-card">
+
+        <h3>Alterar senha</h3>
+
+        <div class="settings-grid">
+
+          <label class="settings-field">
+            <span>Senha atual</span>
+            <input type="password" placeholder="••••••••" />
+          </label>
+
+          <label class="settings-field"></label>
+
+          <label class="settings-field">
+            <span>Nova senha</span>
+            <input type="password" placeholder="••••••••" />
+          </label>
+
+          <label class="settings-field">
+            <span>Confirmar nova senha</span>
+            <input type="password" placeholder="••••••••" />
+          </label>
+
+        </div>
+
+        <div class="settings-actions">
+          <button class="btn-primary">Atualizar senha</button>
+        </div>
+
+      </div>
+
+      <div class="settings-card">
+
+        <h3>Autenticação em duas etapas</h3>
+
+        <div class="settings-toggle-row">
+          <div>
+            <strong>Verificação por SMS</strong>
+            <p class="settings-hint">Exigir um código enviado ao seu celular ao entrar</p>
+          </div>
+          <label class="switch">
+            <input type="checkbox" />
+            <span class="slider"></span>
+          </label>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- SISTEMA -->
+
+    <section class="settings-panel" id="panel-sistema" hidden>
+
+      <div class="settings-card">
+
+        <h3>Preferências do sistema</h3>
+
+        <div class="settings-grid">
+
+          <label class="settings-field">
+            <span>Idioma</span>
+            <select>
+              <option>Português (Brasil)</option>
+              <option>English</option>
+              <option>Español</option>
+            </select>
+          </label>
+
+          <label class="settings-field">
+            <span>Fuso horário</span>
+            <select>
+              <option>Brasília (GMT-3)</option>
+              <option>Manaus (GMT-4)</option>
+            </select>
+          </label>
+
+          <label class="settings-field">
+            <span>Formato de data</span>
+            <select>
+              <option>DD/MM/AAAA</option>
+              <option>MM/DD/AAAA</option>
+            </select>
+          </label>
+
+          <label class="settings-field">
+            <span>Tema padrão</span>
+            <select>
+              <option>Escuro</option>
+              <option>Claro</option>
+            </select>
+          </label>
+
+        </div>
+
+        <div class="settings-actions">
+          <button class="btn-primary">Salvar alterações</button>
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <script src="script.js"></script>
+
+</body>
+
+</html>

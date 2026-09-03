@@ -2,17 +2,20 @@
 
 const themeBtn = document.getElementById("themeBtn");
 
-themeBtn.addEventListener("click", () => {
-
-  document.body.classList.toggle("light");
-
-});
+if (themeBtn) {
+  themeBtn.addEventListener("click", () => {
+    document.body.classList.toggle("light");
+    themeBtn.textContent = document.body.classList.contains("light") ? "☀️" : "🌙";
+  });
+}
 
 /* CLOCK */
 
 function updateClock(){
 
   const clock = document.getElementById("clock");
+
+  if (!clock) return;
 
   const now = new Date();
 
@@ -33,89 +36,189 @@ const menuToggle = document.getElementById("menuToggle");
 
 const sidebar = document.getElementById("sidebar");
 
-menuToggle.addEventListener("click", () => {
+if (menuToggle && sidebar) {
+  menuToggle.addEventListener("click", () => {
+    sidebar.classList.toggle("active");
+  });
+}
 
-  sidebar.classList.toggle("active");
+/* ACTIVE NAV LINK (highlights the current page automatically) */
 
-});
+(function highlightActiveNav(){
 
-/* LINE CHART */
+  const links = document.querySelectorAll(".sidebar nav a");
+
+  const currentPage = window.location.pathname.split("/").pop() || "index.html";
+
+  links.forEach(link => {
+
+    const href = link.getAttribute("href");
+
+    if (href === currentPage) {
+      link.classList.add("active");
+    }
+
+  });
+
+})();
+
+/* LINE CHART (only runs on pages that have this canvas) */
 
 const lineCtx = document.getElementById("lineChart");
 
-new Chart(lineCtx, {
+if (lineCtx) {
 
-  type:"line",
+  new Chart(lineCtx, {
 
-  data:{
+    type:"line",
 
-    labels:[
-      "Jan",
-      "Fev",
-      "Mar",
-      "Abr",
-      "Mai",
-      "Jun"
-    ],
+    data:{
 
-    datasets:[{
+      labels:[
+        "Jan",
+        "Fev",
+        "Mar",
+        "Abr",
+        "Mai",
+        "Jun"
+      ],
 
-      label:"Produção",
+      datasets:[{
 
-      data:[12,19,15,28,35,48],
+        label:"Produção",
 
-      borderColor:"#0ea5a4",
+        data:[12,19,15,28,35,48],
 
-      backgroundColor:"rgba(14,165,164,0.2)",
+        borderColor:"#0ea5a4",
 
-      fill:true,
+        backgroundColor:"rgba(14,165,164,0.2)",
 
-      tension:0.4
-    }]
-  },
+        fill:true,
 
-  options:{
+        tension:0.4
+      }]
+    },
 
-    responsive:true,
+    options:{
 
-    maintainAspectRatio:false
-  }
+      responsive:true,
 
-});
+      maintainAspectRatio:false
+    }
 
-/* PIE CHART */
+  });
+
+}
+
+/* PIE CHART (only runs on pages that have this canvas) */
 
 const pieCtx = document.getElementById("pieChart");
 
-new Chart(pieCtx, {
+if (pieCtx) {
 
-  type:"doughnut",
+  new Chart(pieCtx, {
 
-  data:{
+    type:"doughnut",
 
-    labels:[
-      "Pesquisa",
-      "Produção",
-      "Vendas"
-    ],
+    data:{
 
-    datasets:[{
+      labels:[
+        "Pesquisa",
+        "Produção",
+        "Vendas"
+      ],
 
-      data:[35,45,20],
+      datasets:[{
 
-      backgroundColor:[
-        "#0ea5a4",
-        "#0f3b8c",
-        "#22c55e"
-      ]
-    }]
-  },
+        data:[35,45,20],
 
-  options:{
+        backgroundColor:[
+          "#0ea5a4",
+          "#0f3b8c",
+          "#22c55e"
+        ],
 
-    responsive:true,
+        borderWidth:0
+      }]
+    },
 
-    maintainAspectRatio:false
-  }
+    options:{
 
-});
+      responsive:true,
+
+      maintainAspectRatio:false
+    }
+
+  });
+
+}
+
+/* SETTINGS TABS (only runs on configuracoes.html) */
+
+const settingsTabs = document.querySelectorAll(".settings-tab");
+
+if (settingsTabs.length) {
+
+  settingsTabs.forEach(tab => {
+
+    tab.addEventListener("click", () => {
+
+      settingsTabs.forEach(t => t.classList.remove("active"));
+
+      tab.classList.add("active");
+
+      document.querySelectorAll(".settings-panel").forEach(panel => {
+        panel.hidden = true;
+      });
+
+      const target = document.getElementById(`panel-${tab.dataset.tab}`);
+
+      if (target) target.hidden = false;
+
+    });
+
+  });
+
+}
+
+/* TABLE SEARCH FILTER (reusable on any page with .filter-bar input + table) */
+
+const tableSearch = document.getElementById("tableSearch");
+
+if (tableSearch) {
+
+  tableSearch.addEventListener("input", (e) => {
+
+    const term = e.target.value.trim().toLowerCase();
+
+    const rows = document.querySelectorAll("table tbody tr");
+
+    rows.forEach(row => {
+      const text = row.textContent.toLowerCase();
+      row.style.display = text.includes(term) ? "" : "none";
+    });
+
+  });
+
+}
+
+/* STATUS FILTER (dropdown that filters rows by data-status attribute) */
+
+const statusFilter = document.getElementById("statusFilter");
+
+if (statusFilter) {
+
+  statusFilter.addEventListener("change", (e) => {
+
+    const value = e.target.value;
+
+    const rows = document.querySelectorAll("table tbody tr");
+
+    rows.forEach(row => {
+      const status = row.getAttribute("data-status");
+      row.style.display = (value === "all" || status === value) ? "" : "none";
+    });
+
+  });
+
+} 
