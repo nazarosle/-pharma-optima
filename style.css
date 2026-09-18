@@ -1136,6 +1136,223 @@ tbody tr:hover{
   transform:translateX(20px);
 }
 
+/* LOGOUT */
+
+#logoutBtn{
+
+  border:1px solid var(--border);
+
+  background:var(--card);
+
+  color:var(--danger);
+
+  width:48px;
+  height:48px;
+
+  border-radius:14px;
+
+  cursor:pointer;
+
+  font-size:16px;
+}
+
+#logoutBtn:hover{
+
+  background:rgba(239,68,68,0.12);
+}
+
+/* SHIFT SELECT (inline, dentro da tabela de funcionários) */
+
+.shift-select{
+
+  background:var(--bg);
+
+  color:var(--text);
+
+  border:1px solid var(--border);
+
+  padding:8px 10px;
+
+  border-radius:10px;
+
+  font-size:13px;
+
+  cursor:pointer;
+}
+
+/* ANVISA RESULTS */
+
+.anvisa-results{
+
+  margin-top:12px;
+
+  display:flex;
+
+  flex-direction:column;
+
+  gap:8px;
+
+  max-height:200px;
+
+  overflow-y:auto;
+}
+
+.anvisa-result-item{
+
+  text-align:left;
+
+  background:var(--bg);
+
+  border:1px solid var(--border);
+
+  border-radius:12px;
+
+  padding:10px 14px;
+
+  cursor:pointer;
+
+  display:flex;
+
+  flex-direction:column;
+
+  gap:2px;
+}
+
+.anvisa-result-item:hover{
+
+  border-color:var(--primary);
+}
+
+.anvisa-result-item span{
+
+  font-size:0.78rem;
+
+  color:var(--soft);
+}
+
+/* MODAL */
+
+.modal-overlay{
+
+  display:none;
+
+  position:fixed;
+
+  inset:0;
+
+  background:rgba(0,0,0,0.55);
+
+  z-index:1000;
+
+  align-items:center;
+
+  justify-content:center;
+
+  padding:20px;
+}
+
+.modal-overlay.open{
+
+  display:flex;
+}
+
+.modal-box{
+
+  background:var(--card);
+
+  border:1px solid var(--border);
+
+  border-radius:22px;
+
+  padding:26px;
+
+  width:100%;
+
+  max-width:520px;
+
+  max-height:90vh;
+
+  overflow-y:auto;
+}
+
+.modal-header{
+
+  display:flex;
+
+  justify-content:space-between;
+
+  align-items:center;
+
+  margin-bottom:20px;
+}
+
+.modal-header h3{
+
+  font-size:1.15rem;
+}
+
+.modal-close{
+
+  border:none;
+
+  background:transparent;
+
+  color:var(--soft);
+
+  font-size:20px;
+
+  cursor:pointer;
+
+  width:34px;
+  height:34px;
+
+  border-radius:10px;
+}
+
+.modal-close:hover{
+
+  background:var(--hover);
+
+  color:var(--text);
+}
+
+.modal-grid{
+
+  display:grid;
+
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+
+  gap:16px;
+
+  margin-bottom:22px;
+}
+
+.modal-footer{
+
+  display:flex;
+
+  justify-content:flex-end;
+
+  gap:12px;
+}
+
+.btn-outline{
+
+  border:1px solid var(--border);
+
+  background:transparent;
+
+  color:var(--text);
+
+  padding:12px 20px;
+
+  border-radius:12px;
+
+  cursor:pointer;
+
+  font-size:14px;
+}
+
 /* RESPONSIVE */
 
 @media(max-width:1000px){

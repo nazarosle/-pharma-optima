@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>Pharma Optima | Metas</title>
+
+  <link rel="stylesheet" href="../style.css"/>
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+  />
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- FIREBASE -->
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
+  <script src="../js/firebase-config.js"></script>
+  <script src="../js/auth-guard.js"></script>
+</head>
+
+<body>
+
+  <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu">
+    <i class="fa-solid fa-bars"></i>
+  </button>
+
+  <!-- SIDEBAR -->
+
+  <aside class="sidebar" id="sidebar">
+
+    <div class="logo">
+      <img src="../img/logo.png" alt="Pharma Optima" />
+    </div>
+
+    <nav>
+
+      <a href="dashboard.html" data-page="dashboard"><i class="fa-solid fa-chart-line"></i><span data-i18n="nav.dashboard">Dashboard</span></a>
+      <a href="estoque.html" data-page="estoque"><i class="fa-solid fa-boxes-stacked"></i><span data-i18n="nav.estoque">Estoque</span></a>
+      <a href="relatorios.html" data-page="relatorios"><i class="fa-solid fa-chart-pie"></i><span data-i18n="nav.relatorios">Relatórios</span></a>
+      <a href="metas.html" data-page="metas"><i class="fa-solid fa-bullseye"></i><span data-i18n="nav.metas">Metas</span></a>
+      <a href="funcionarios.html" data-page="funcionarios"><i class="fa-solid fa-users"></i><span data-i18n="nav.funcionarios">Funcionários</span></a>
+      <a href="configuracoes.html" data-page="configuracoes"><i class="fa-solid fa-gear"></i><span data-i18n="nav.configuracoes">Configurações</span></a>
+
+    </nav>
+
+  </aside>
+
+  <!-- CONTAINER -->
+
+  <main class="container">
+
+    <!-- NAVBAR -->
+
+    <header class="navbar">
+
+      <div class="page-title">
+        <h1 data-i18n="page.metas.title">Metas</h1>
+        <p data-i18n="page.metas.subtitle">Objetivos de produção, vendas e qualidade</p>
+      </div>
+
+      <div class="nav-right">
+
+        <div class="clock" id="clock">00:00</div>
+
+        <div class="notification">
+          <i class="fa-solid fa-bell"></i>
+          <span>3</span>
+        </div>
+
+        <button id="themeBtn" aria-label="Alternar tema claro/escuro">🌙</button>
+
+        <div class="profile">
+          <img src="../img/manja.jpg" alt="Foto do administrador" />
+          <div class="profile-info">
+            <span>Administrador</span>
+            <small id="currentUserEmail">Pharma Optima</small>
+          </div>
+        </div>
+
+        <button id="logoutBtn" onclick="logout()" aria-label="Sair" title="Sair">
+          <i class="fa-solid fa-right-from-bracket"></i>
+        </button>
+
+      </div>
+
+    </header>
+
+    <!-- SUMMARY CARDS -->
+
+    <section class="cards">
+
+      <div class="card">
+        <div class="card-icon"><i class="fa-solid fa-bullseye"></i></div>
+        <h3>Metas ativas</h3>
+        <p id="statActiveGoals">0</p>
+      </div>
+
+      <div class="card">
+        <div class="card-icon"><i class="fa-solid fa-flag-checkered"></i></div>
+        <h3>Concluídas</h3>
+        <p id="statCompletedGoals">0</p>
+      </div>
+
+      <div class="card">
+        <div class="card-icon"><i class="fa-solid fa-hourglass-half"></i></div>
+        <h3>Em andamento</h3>
+        <p id="statInProgressGoals">0</p>
+      </div>
+
+      <div class="card">
+        <div class="card-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+        <h3>Atrasadas</h3>
+        <p id="statLateGoals">0</p>
+        <span class="trend down">
+          <i class="fa-solid fa-arrow-trend-down"></i>
+          precisa de atenção
+        </span>
+      </div>
+
+    </section>
+
+    <!-- GOALS PROGRESS -->
+
+    <section class="progress-section" id="goalsProgressContainer">
+      <!-- Preenchido dinamicamente pelo script.js -->
+    </section>
+
+    <!-- TABLE -->
+
+    <section class="table-card">
+
+      <div class="table-header">
+        <h3>Detalhamento das metas</h3>
+        <button id="btnAddGoal">
+          <i class="fa-solid fa-plus"></i>
+          <span data-i18n="common.novaMeta">Nova meta</span>
+        </button>
+      </div>
+
+      <table>
+
+        <thead>
+          <tr>
+            <th data-i18n="table.meta">Meta</th>
+            <th data-i18n="table.responsavel">Responsável</th>
+            <th data-i18n="table.prazo">Prazo</th>
+            <th data-i18n="table.progresso">Progresso</th>
+            <th data-i18n="table.status">Status</th>
+            <th data-i18n="table.acoes">Ações</th>
+          </tr>
+        </thead>
+
+        <tbody id="goalsTableBody">
+          <!-- Preenchido dinamicamente pelo script.js -->
+        </tbody>
+
+      </table>
+
+    </section>
+
+  </main>
+
+  <!-- MODAL: NOVA / EDITAR META -->
+
+  <div class="modal-overlay" id="goalModal">
+    <div class="modal-box">
+
+      <div class="modal-header">
+        <h3 id="goalModalTitle">Nova meta</h3>
+        <button class="modal-close" data-close-modal="goalModal">&times;</button>
+      </div>
+
+      <form id="goalForm">
+
+        <input type="hidden" id="goalId" />
+
+        <div class="modal-grid">
+
+          <label class="settings-field" style="grid-column:1 / -1;">
+            <span>Título da meta</span>
+            <input type="text" id="goalTitle" required />
+          </label>
+
+          <label class="settings-field">
+            <span>Responsável</span>
+            <input type="text" id="goalOwner" required />
+          </label>
+
+          <label class="settings-field">
+            <span>Prazo</span>
+            <input type="date" id="goalDeadline" required />
+          </label>
+
+          <label class="settings-field">
+            <span>Progresso (%)</span>
+            <input type="number" id="goalProgress" min="0" max="100" value="0" required />
+          </label>
+
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-outline" data-close-modal="goalModal">Cancelar</button>
+          <button type="submit" class="btn-primary">Salvar</button>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+
+  <script src="../js/data.js"></script>
+  <script src="../js/script.js"></script>
+
+</body>
+
+</html>

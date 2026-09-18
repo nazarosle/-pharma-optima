@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>Pharma Optima | Estoque</title>
+
+  <link rel="stylesheet" href="../style.css"/>
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+  />
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- FIREBASE -->
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
+  <script src="../js/firebase-config.js"></script>
+  <script src="../js/auth-guard.js"></script>
+</head>
+
+<body>
+
+  <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu">
+    <i class="fa-solid fa-bars"></i>
+  </button>
+
+  <!-- SIDEBAR -->
+
+  <aside class="sidebar" id="sidebar">
+
+    <div class="logo">
+      <img src="../img/logo.png" alt="Pharma Optima" />
+    </div>
+
+    <nav>
+
+      <a href="dashboard.html" data-page="dashboard"><i class="fa-solid fa-chart-line"></i><span data-i18n="nav.dashboard">Dashboard</span></a>
+      <a href="estoque.html" data-page="estoque"><i class="fa-solid fa-boxes-stacked"></i><span data-i18n="nav.estoque">Estoque</span></a>
+      <a href="relatorios.html" data-page="relatorios"><i class="fa-solid fa-chart-pie"></i><span data-i18n="nav.relatorios">Relatórios</span></a>
+      <a href="metas.html" data-page="metas"><i class="fa-solid fa-bullseye"></i><span data-i18n="nav.metas">Metas</span></a>
+      <a href="funcionarios.html" data-page="funcionarios"><i class="fa-solid fa-users"></i><span data-i18n="nav.funcionarios">Funcionários</span></a>
+      <a href="configuracoes.html" data-page="configuracoes"><i class="fa-solid fa-gear"></i><span data-i18n="nav.configuracoes">Configurações</span></a>
+
+    </nav>
+
+  </aside>
+
+  <!-- CONTAINER -->
+
+  <main class="container">
+
+    <!-- NAVBAR -->
+
+    <header class="navbar">
+
+      <div class="page-title">
+        <h1 data-i18n="page.estoque.title">Estoque</h1>
+        <p data-i18n="page.estoque.subtitle">Controle de medicamentos, lotes e validade</p>
+      </div>
+
+      <div class="nav-right">
+
+        <div class="clock" id="clock">00:00</div>
+
+        <div class="notification">
+          <i class="fa-solid fa-bell"></i>
+          <span>3</span>
+        </div>
+
+        <button id="themeBtn" aria-label="Alternar tema claro/escuro">🌙</button>
+
+        <div class="profile">
+          <img src="../img/manja.jpg" alt="Foto do administrador" />
+          <div class="profile-info">
+            <span>Administrador</span>
+            <small id="currentUserEmail">Pharma Optima</small>
+          </div>
+        </div>
+
+        <button id="logoutBtn" onclick="logout()" aria-label="Sair" title="Sair">
+          <i class="fa-solid fa-right-from-bracket"></i>
+        </button>
+
+      </div>
+
+    </header>
+
+    <!-- SUMMARY CARDS -->
+
+    <section class="cards">
+
+      <div class="card">
+        <div class="card-icon"><i class="fa-solid fa-boxes-stacked"></i></div>
+        <h3>Itens em estoque</h3>
+        <p id="statTotalItems">0</p>
+      </div>
+
+      <div class="card">
+        <div class="card-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+        <h3>Estoque baixo</h3>
+        <p id="statLowStock">0</p>
+        <span class="trend down">
+          <i class="fa-solid fa-arrow-trend-up"></i>
+          requer atenção
+        </span>
+      </div>
+
+      <div class="card">
+        <div class="card-icon"><i class="fa-solid fa-calendar-xmark"></i></div>
+        <h3>Vencendo em 30 dias</h3>
+        <p id="statExpiringSoon">0</p>
+      </div>
+
+      <div class="card">
+        <div class="card-icon"><i class="fa-solid fa-ban"></i></div>
+        <h3>Fora de estoque</h3>
+        <p id="statOutOfStock">0</p>
+      </div>
+
+    </section>
+
+    <!-- FILTERS -->
+
+    <div class="filter-bar">
+
+      <div class="search-box">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" id="tableSearch" data-i18n-placeholder="common.buscar" placeholder="Buscar por produto ou lote..." />
+      </div>
+
+      <select id="statusFilter">
+        <option value="all">Todos os status</option>
+        <option value="alto">Alto</option>
+        <option value="medio">Médio</option>
+        <option value="baixo">Baixo</option>
+        <option value="esgotado">Esgotado</option>
+      </select>
+
+      <select>
+        <option>Todas as categorias</option>
+        <option>Analgésicos</option>
+        <option>Vitaminas</option>
+        <option>Anti-inflamatórios</option>
+        <option>Antibióticos</option>
+        <option>Antialérgicos</option>
+      </select>
+
+    </div>
+
+    <!-- TABLE -->
+
+    <section class="table-card">
+
+      <div class="table-header">
+        <h3>Todos os produtos</h3>
+        <button id="btnAddProduct">
+          <i class="fa-solid fa-plus"></i>
+          <span data-i18n="common.novoProduto">Novo produto</span>
+        </button>
+      </div>
+
+      <table>
+
+        <thead>
+          <tr>
+            <th data-i18n="table.produto">Produto</th>
+            <th data-i18n="table.categoria">Categoria</th>
+            <th data-i18n="table.lote">Lote</th>
+            <th data-i18n="table.validade">Validade</th>
+            <th data-i18n="table.quantidade">Quantidade</th>
+            <th data-i18n="table.status">Status</th>
+            <th data-i18n="table.acoes">Ações</th>
+          </tr>
+        </thead>
+
+        <tbody id="productsTableBody">
+          <!-- Preenchido dinamicamente pelo script.js a partir do data.js -->
+        </tbody>
+
+      </table>
+
+      <p class="settings-hint" style="margin-top:14px;">
+        Os produtos abaixo usam princípios ativos reais (DCB) e o formato oficial de 13 dígitos do registro Anvisa.
+        Substitua os números pelos registros reais de cada produto antes de usar em produção.
+      </p>
+
+    </section>
+
+  </main>
+
+  <!-- MODAL: NOVO / EDITAR PRODUTO -->
+
+  <div class="modal-overlay" id="productModal">
+    <div class="modal-box">
+
+      <div class="modal-header">
+        <h3 id="productModalTitle">Novo produto</h3>
+        <button class="modal-close" data-close-modal="productModal">&times;</button>
+      </div>
+
+      <form id="productForm">
+
+        <input type="hidden" id="productId" />
+
+        <div class="modal-grid">
+
+          <label class="settings-field" style="grid-column:1 / -1;">
+            <span>Nome do produto</span>
+            <input type="text" id="productName" required />
+          </label>
+
+          <label class="settings-field">
+            <span>Princípio ativo (DCB)</span>
+            <input type="text" id="productActive" required />
+          </label>
+
+          <label class="settings-field">
+            <span>Categoria</span>
+            <select id="productCategory" required>
+              <option>Analgésicos</option>
+              <option>Vitaminas</option>
+              <option>Anti-inflamatórios</option>
+              <option>Antibióticos</option>
+              <option>Antialérgicos</option>
+              <option>Outros</option>
+            </select>
+          </label>
+
+          <label class="settings-field">
+            <span>Lote</span>
+            <input type="text" id="productBatch" required />
+          </label>
+
+          <label class="settings-field">
+            <span>Validade</span>
+            <input type="date" id="productExpiry" required />
+          </label>
+
+          <label class="settings-field">
+            <span>Quantidade (unidades)</span>
+            <input type="number" id="productQty" min="0" required />
+          </label>
+
+          <label class="settings-field">
+            <span>Registro Anvisa</span>
+            <input type="text" id="productRegistry" placeholder="1.0068.0000.000-0" />
+          </label>
+
+        </div>
+
+        <div style="margin-bottom:22px;">
+          <button type="button" class="btn-outline" id="btnVerifyAnvisa">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            Verificar na base oficial da Anvisa
+          </button>
+          <div id="anvisaResults" class="anvisa-results"></div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-outline" data-close-modal="productModal">Cancelar</button>
+          <button type="submit" class="btn-primary">Salvar</button>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+
+  <script src="../js/data.js"></script>
+  <script src="../js/script.js"></script>
+
+</body>
+
+</html>

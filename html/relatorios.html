@@ -7,7 +7,7 @@
 
   <title>Pharma Optima | Relatórios</title>
 
-  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="../style.css"/>
 
   <link
     rel="stylesheet"
@@ -15,6 +15,13 @@
   />
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- FIREBASE -->
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
+  <script src="../js/firebase-config.js"></script>
+  <script src="../js/auth-guard.js"></script>
 </head>
 
 <body>
@@ -28,40 +35,17 @@
   <aside class="sidebar" id="sidebar">
 
     <div class="logo">
-      <img src="logo.jpg" alt="Pharma Optima" />
+      <img src="../img/logo.png" alt="Pharma Optima" />
     </div>
 
     <nav>
 
-      <a href="index.html" data-page="dashboard">
-        <i class="fa-solid fa-chart-line"></i>
-        Dashboard
-      </a>
-
-      <a href="estoque.html" data-page="estoque">
-        <i class="fa-solid fa-boxes-stacked"></i>
-        Estoque
-      </a>
-
-      <a href="relatorios.html" data-page="relatorios">
-        <i class="fa-solid fa-chart-pie"></i>
-        Relatórios
-      </a>
-
-      <a href="metas.html" data-page="metas">
-        <i class="fa-solid fa-bullseye"></i>
-        Metas
-      </a>
-
-      <a href="funcionarios.html" data-page="funcionarios">
-        <i class="fa-solid fa-users"></i>
-        Funcionários
-      </a>
-
-      <a href="configuracoes.html" data-page="configuracoes">
-        <i class="fa-solid fa-gear"></i>
-        Configurações
-      </a>
+      <a href="dashboard.html" data-page="dashboard"><i class="fa-solid fa-chart-line"></i><span data-i18n="nav.dashboard">Dashboard</span></a>
+      <a href="estoque.html" data-page="estoque"><i class="fa-solid fa-boxes-stacked"></i><span data-i18n="nav.estoque">Estoque</span></a>
+      <a href="relatorios.html" data-page="relatorios"><i class="fa-solid fa-chart-pie"></i><span data-i18n="nav.relatorios">Relatórios</span></a>
+      <a href="metas.html" data-page="metas"><i class="fa-solid fa-bullseye"></i><span data-i18n="nav.metas">Metas</span></a>
+      <a href="funcionarios.html" data-page="funcionarios"><i class="fa-solid fa-users"></i><span data-i18n="nav.funcionarios">Funcionários</span></a>
+      <a href="configuracoes.html" data-page="configuracoes"><i class="fa-solid fa-gear"></i><span data-i18n="nav.configuracoes">Configurações</span></a>
 
     </nav>
 
@@ -76,8 +60,8 @@
     <header class="navbar">
 
       <div class="page-title">
-        <h1>Relatórios</h1>
-        <p>Análises de produção, vendas e conformidade</p>
+        <h1 data-i18n="page.relatorios.title">Relatórios</h1>
+        <p data-i18n="page.relatorios.subtitle">Análises de produção, vendas e conformidade</p>
       </div>
 
       <div class="nav-right">
@@ -92,12 +76,16 @@
         <button id="themeBtn" aria-label="Alternar tema claro/escuro">🌙</button>
 
         <div class="profile">
-          <img src="manja.jpg" alt="Foto do administrador" />
+          <img src="../img/manja.jpg" alt="Foto do administrador" />
           <div class="profile-info">
             <span>Administrador</span>
-            <small>Pharma Optima</small>
+            <small id="currentUserEmail">Pharma Optima</small>
           </div>
         </div>
+
+        <button id="logoutBtn" onclick="logout()" aria-label="Sair" title="Sair">
+          <i class="fa-solid fa-right-from-bracket"></i>
+        </button>
 
       </div>
 
@@ -146,23 +134,29 @@
     <section class="charts">
 
       <div class="chart-card">
+
         <div class="chart-header">
           <h3>Faturamento por Mês</h3>
           <span>2025</span>
         </div>
+
         <div class="chart-container">
           <canvas id="revenueChart"></canvas>
         </div>
+
       </div>
 
       <div class="chart-card">
+
         <div class="chart-header">
           <h3>Vendas por Categoria</h3>
           <span>Atual</span>
         </div>
+
         <div class="chart-container">
           <canvas id="categoryChart"></canvas>
         </div>
+
       </div>
 
     </section>
@@ -305,7 +299,8 @@
 
   </main>
 
-  <script src="script.js"></script>
+  <script src="../js/data.js"></script>
+  <script src="../js/script.js"></script>
 
   <script>
     const revenueCtx = document.getElementById("revenueChart");
@@ -338,9 +333,8 @@
           datasets: [{
             data: [38, 24, 21, 17],
             backgroundColor: ["#0ea5a4", "#0f3b8c", "#22c55e", "#f59e0b"],
-            borderWidth:0
+            borderWidth: 0
           }]
-          
         },
         options: {
           responsive: true,

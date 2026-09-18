@@ -4,263 +4,233 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
-  <title>Pharma Optima | Dashboard</title>
-
+  <title>Pharma Optima | Entrar</title>
   <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-  />
+  <!-- FIREBASE -->
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
 
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+
+    .login-wrap{
+      width:100%;
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+    }
+
+    .login-box{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:24px;
+      padding:40px;
+      width:100%;
+      max-width:400px;
+    }
+
+    .login-logo{
+      display:flex;
+      justify-content:center;
+      margin-bottom:10px;
+    }
+
+    .login-logo img{
+      width:140px;
+      border-radius:12px;
+    }
+
+    .login-box h1{
+      text-align:center;
+      font-size:1.4rem;
+      margin-bottom:6px;
+    }
+
+    .login-box p.subtitle{
+      text-align:center;
+      color:var(--soft);
+      font-size:0.9rem;
+      margin-bottom:28px;
+    }
+
+    .login-field{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      margin-bottom:18px;
+    }
+
+    .login-field span{
+      font-size:0.85rem;
+      color:var(--soft);
+    }
+
+    .login-field input{
+      background:var(--bg);
+      color:var(--text);
+      border:1px solid var(--border);
+      padding:13px 16px;
+      border-radius:12px;
+      font-size:14px;
+    }
+
+    .login-error{
+      background:rgba(239,68,68,0.12);
+      color:var(--danger);
+      padding:12px 14px;
+      border-radius:12px;
+      font-size:0.85rem;
+      margin-bottom:18px;
+      display:none;
+    }
+
+    .login-error.show{
+      display:block;
+    }
+
+    .login-submit{
+      width:100%;
+      border:none;
+      background:var(--primary);
+      color:white;
+      padding:14px;
+      border-radius:12px;
+      font-size:15px;
+      font-weight:bold;
+      cursor:pointer;
+    }
+
+    .login-submit:disabled{
+      opacity:0.6;
+      cursor:not-allowed;
+    }
+
+    .login-forgot{
+      text-align:center;
+      margin-top:18px;
+      font-size:0.85rem;
+    }
+
+    .login-forgot a{
+      color:var(--primary);
+      text-decoration:none;
+      cursor:pointer;
+    }
+
+  </style>
+
 </head>
 
-<body>
+<body class="light-off">
 
-  <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu">
-    <i class="fa-solid fa-bars"></i>
-  </button>
+  <div class="login-wrap">
+    <div class="login-box">
 
-  <!-- SIDEBAR -->
+      <div class="login-logo">
+        <img src="img/logoDark.png" alt="Pharma Optima" />
+      </div>
 
-  <aside class="sidebar" id="sidebar">
+      <h1>Pharma Optima</h1>
+      <p class="subtitle">Entre com sua conta para acessar o painel</p>
 
-    <div class="logo">
-      <img src="logo.jpg" alt="Pharma Optima" />
+      <div class="login-error" id="loginError"></div>
+
+      <form id="loginForm">
+
+        <label class="login-field">
+          <span>E-mail</span>
+          <input type="email" id="loginEmail" required autocomplete="username" />
+        </label>
+
+        <label class="login-field">
+          <span>Senha</span>
+          <input type="password" id="loginPassword" required autocomplete="current-password" />
+        </label>
+
+        <button type="submit" class="login-submit" id="loginSubmitBtn">Entrar</button>
+
+      </form>
+
+      <p class="login-forgot">
+        <a id="forgotPasswordLink">Esqueci minha senha</a>
+      </p>
+
     </div>
+  </div>
 
-    <nav>
+  <script>
 
-      <a href="index.html" data-page="dashboard">
-        <i class="fa-solid fa-chart-line"></i>
-        Dashboard
-      </a>
+    // Se já estiver logado, pula direto pro dashboard
+    auth.onAuthStateChanged((user) => {
+      if (user) window.location.href = "html/dashboard.html";
+    });
 
-      <a href="estoque.html" data-page="estoque">
-        <i class="fa-solid fa-boxes-stacked"></i>
-        Estoque
-      </a>
+    const form = document.getElementById("loginForm");
+    const errorBox = document.getElementById("loginError");
+    const submitBtn = document.getElementById("loginSubmitBtn");
 
-      <a href="relatorios.html" data-page="relatorios">
-        <i class="fa-solid fa-chart-pie"></i>
-        Relatórios
-      </a>
+    function showError(message){
+      errorBox.textContent = message;
+      errorBox.classList.add("show");
+    }
 
-      <a href="metas.html" data-page="metas">
-        <i class="fa-solid fa-bullseye"></i>
-        Metas
-      </a>
+    const ERROR_MESSAGES = {
+      "auth/invalid-email": "E-mail inválido.",
+      "auth/user-not-found": "Não encontramos uma conta com esse e-mail.",
+      "auth/wrong-password": "Senha incorreta.",
+      "auth/invalid-credential": "E-mail ou senha incorretos.",
+      "auth/too-many-requests": "Muitas tentativas. Aguarde um pouco e tente de novo."
+    };
 
-      <a href="funcionarios.html" data-page="funcionarios">
-        <i class="fa-solid fa-users"></i>
-        Funcionários
-      </a>
+    form.addEventListener("submit", (e) => {
 
-      <a href="configuracoes.html" data-page="configuracoes">
-        <i class="fa-solid fa-gear"></i>
-        Configurações
-      </a>
+      e.preventDefault();
 
-    </nav>
+      errorBox.classList.remove("show");
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Entrando...";
 
-  </aside>
+      const email = document.getElementById("loginEmail").value.trim();
+      const password = document.getElementById("loginPassword").value;
 
-  <!-- CONTAINER -->
+      auth.signInWithEmailAndPassword(email, password)
+        .then(() => {
+          window.location.href = "html/dashboard.html";
+        })
+        .catch((err) => {
+          showError(ERROR_MESSAGES[err.code] || "Não foi possível entrar. Tente novamente.");
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Entrar";
+        });
 
-  <main class="container">
+    });
 
-    <!-- NAVBAR -->
+    document.getElementById("forgotPasswordLink").addEventListener("click", () => {
 
-    <header class="navbar">
+      const email = document.getElementById("loginEmail").value.trim();
 
-      <div class="search-box">
-        <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" placeholder="Pesquisar medicamentos, relatórios..." />
-      </div>
+      if (!email) {
+        showError("Digite seu e-mail no campo acima primeiro, depois clique em \"Esqueci minha senha\".");
+        return;
+      }
 
-      <div class="nav-right">
+      auth.sendPasswordResetEmail(email)
+        .then(() => {
+          errorBox.classList.remove("show");
+          alert("Enviamos um link de redefinição de senha para " + email);
+        })
+        .catch((err) => {
+          showError(ERROR_MESSAGES[err.code] || "Não foi possível enviar o e-mail de redefinição.");
+        });
 
-        <div class="clock" id="clock">00:00</div>
+    });
 
-        <div class="notification">
-          <i class="fa-solid fa-bell"></i>
-          <span>3</span>
-        </div>
-
-        <button id="themeBtn" aria-label="Alternar tema claro/escuro">🌙</button>
-
-        <div class="profile">
-          <img src="manja.jpg" alt="Foto do administrador" />
-          <div class="profile-info">
-            <span>Administrador</span>
-            <small>Pharma Optima</small>
-          </div>
-        </div>
-
-      </div>
-
-    </header>
-
-    <!-- CARDS -->
-
-    <section class="cards">
-
-      <div class="card">
-        <div class="card-icon"><i class="fa-solid fa-pills"></i></div>
-        <h3>Produtos</h3>
-        <p>1.240</p>
-        <span class="trend">
-          <i class="fa-solid fa-arrow-trend-up"></i>
-          +4% este mês
-        </span>
-      </div>
-
-      <div class="card">
-        <div class="card-icon"><i class="fa-solid fa-chart-line"></i></div>
-        <h3>Crescimento</h3>
-        <p>+12%</p>
-        <span class="trend">
-          <i class="fa-solid fa-arrow-trend-up"></i>
-          vs. mês anterior
-        </span>
-      </div>
-
-      <div class="card">
-        <div class="card-icon"><i class="fa-solid fa-industry"></i></div>
-        <h3>Produção</h3>
-        <p>84%</p>
-        <span class="trend">
-          <i class="fa-solid fa-arrow-trend-up"></i>
-          da capacidade
-        </span>
-      </div>
-
-      <div class="card">
-        <div class="card-icon"><i class="fa-solid fa-users"></i></div>
-        <h3>Funcionários</h3>
-        <p>5.200</p>
-        <span class="trend down">
-          <i class="fa-solid fa-arrow-trend-down"></i>
-          -1% este mês
-        </span>
-      </div>
-
-    </section>
-
-    <!-- CHARTS -->
-
-    <section class="charts">
-
-      <div class="chart-card">
-        <div class="chart-header">
-          <h3>Produção Mensal</h3>
-          <span>2025</span>
-        </div>
-        <div class="chart-container">
-          <canvas id="lineChart"></canvas>
-        </div>
-      </div>
-
-      <div class="chart-card">
-        <div class="chart-header">
-          <h3>Distribuição</h3>
-          <span>Atual</span>
-        </div>
-        <div class="chart-container">
-          <canvas id="pieChart"></canvas>
-        </div>
-      </div>
-
-    </section>
-
-    <!-- PROGRESS -->
-
-    <section class="progress-section">
-
-      <div class="progress-card">
-        <div class="progress-title">
-          <span>Farmacêutico</span>
-          <span>80%</span>
-        </div>
-        <div class="progress-bar">
-          <div style="width:80%"></div>
-        </div>
-      </div>
-
-      <div class="progress-card">
-        <div class="progress-title">
-          <span>Pesquisa</span>
-          <span>60%</span>
-        </div>
-        <div class="progress-bar">
-          <div style="width:60%"></div>
-        </div>
-      </div>
-
-      <div class="progress-card">
-        <div class="progress-title">
-          <span>Produção</span>
-          <span>90%</span>
-        </div>
-        <div class="progress-bar">
-          <div style="width:90%"></div>
-        </div>
-      </div>
-
-    </section>
-
-    <!-- TABLE -->
-
-    <section class="table-card">
-
-      <div class="table-header">
-        <h3>Estoque Atual</h3>
-        <button onclick="window.location.href='estoque.html'">
-          Ver tudo
-        </button>
-      </div>
-
-      <table>
-
-        <thead>
-          <tr>
-            <th>Produto</th>
-            <th>Status</th>
-            <th>Crescimento</th>
-          </tr>
-        </thead>
-
-        <tbody>
-
-          <tr>
-            <td>Dipirona</td>
-            <td><span class="pill blue">Alto</span></td>
-            <td>+12%</td>
-          </tr>
-
-          <tr>
-            <td>Vitamina C</td>
-            <td><span class="pill blue">Alto</span></td>
-            <td>+18%</td>
-          </tr>
-
-          <tr>
-            <td>Ibuprofeno</td>
-            <td><span class="pill orange">Médio</span></td>
-            <td>+7%</td>
-          </tr>
-
-        </tbody>
-
-      </table>
-
-    </section>
-
-  </main>
-
-  <script src="script.js"></script>
+  </script>
 
 </body>
 

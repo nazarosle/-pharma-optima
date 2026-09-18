@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>Pharma Optima | Dashboard</title>
+
+  <link rel="stylesheet" href="../style.css"/>
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+  />
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- FIREBASE -->
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
+  <script src="../js/firebase-config.js"></script>
+  <script src="../js/auth-guard.js"></script>
+</head>
+
+<body>
+
+  <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu">
+    <i class="fa-solid fa-bars"></i>
+  </button>
+
+  <!-- SIDEBAR -->
+
+  <aside class="sidebar" id="sidebar">
+
+    <div class="logo">
+      <img src="../img/logo.png" alt="Pharma Optima" />
+    </div>
+
+    <nav>
+
+      <a href="dashboard.html" data-page="dashboard"><i class="fa-solid fa-chart-line"></i><span data-i18n="nav.dashboard">Dashboard</span></a>
+      <a href="estoque.html" data-page="estoque"><i class="fa-solid fa-boxes-stacked"></i><span data-i18n="nav.estoque">Estoque</span></a>
+      <a href="relatorios.html" data-page="relatorios"><i class="fa-solid fa-chart-pie"></i><span data-i18n="nav.relatorios">Relatórios</span></a>
+      <a href="metas.html" data-page="metas"><i class="fa-solid fa-bullseye"></i><span data-i18n="nav.metas">Metas</span></a>
+      <a href="funcionarios.html" data-page="funcionarios"><i class="fa-solid fa-users"></i><span data-i18n="nav.funcionarios">Funcionários</span></a>
+      <a href="configuracoes.html" data-page="configuracoes"><i class="fa-solid fa-gear"></i><span data-i18n="nav.configuracoes">Configurações</span></a>
+
+    </nav>
+
+  </aside>
+
+  <!-- CONTAINER -->
+
+  <main class="container">
+
+    <!-- NAVBAR -->
+
+    <header class="navbar">
+
+      <div class="search-box">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" data-i18n-placeholder="search.placeholder" placeholder="Pesquisar medicamentos, relatórios..." />
+      </div>
+
+      <div class="nav-right">
+
+        <div class="clock" id="clock">00:00</div>
+
+        <div class="notification">
+          <i class="fa-solid fa-bell"></i>
+          <span>3</span>
+        </div>
+
+        <button id="themeBtn" aria-label="Alternar tema claro/escuro">🌙</button>
+
+        <div class="profile">
+          <img src="../img/manja.jpg" alt="Foto do administrador" />
+          <div class="profile-info">
+            <span>Administrador</span>
+            <small id="currentUserEmail">Pharma Optima</small>
+          </div>
+        </div>
+
+        <button id="logoutBtn" onclick="logout()" aria-label="Sair" title="Sair">
+          <i class="fa-solid fa-right-from-bracket"></i>
+        </button>
+
+      </div>
+
+    </header>
+
+    <!-- CARDS -->
+
+    <section class="cards">
+
+      <div class="card">
+        <div class="card-icon"><i class="fa-solid fa-pills"></i></div>
+        <h3>Produtos</h3>
+        <p id="statProductsCount">0</p>
+        <span class="trend">
+          <i class="fa-solid fa-arrow-trend-up"></i>
+          cadastrados no sistema
+        </span>
+      </div>
+
+      <div class="card">
+        <div class="card-icon"><i class="fa-solid fa-chart-line"></i></div>
+        <h3>Crescimento</h3>
+        <p>+12%</p>
+        <span class="trend">
+          <i class="fa-solid fa-arrow-trend-up"></i>
+          vs. mês anterior
+        </span>
+      </div>
+
+      <div class="card">
+        <div class="card-icon"><i class="fa-solid fa-industry"></i></div>
+        <h3>Produção</h3>
+        <p>84%</p>
+        <span class="trend">
+          <i class="fa-solid fa-arrow-trend-up"></i>
+          da capacidade
+        </span>
+      </div>
+
+      <div class="card">
+        <div class="card-icon"><i class="fa-solid fa-users"></i></div>
+        <h3>Funcionários</h3>
+        <p id="statEmployeesCount">0</p>
+        <span class="trend">
+          <i class="fa-solid fa-arrow-trend-up"></i>
+          cadastrados no sistema
+        </span>
+      </div>
+
+    </section>
+
+    <!-- CHARTS -->
+
+    <section class="charts">
+
+      <div class="chart-card">
+        <div class="chart-header">
+          <h3>Produção Mensal</h3>
+          <span>2025</span>
+        </div>
+        <div class="chart-container">
+          <canvas id="lineChart"></canvas>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-header">
+          <h3>Distribuição</h3>
+          <span>Atual</span>
+        </div>
+        <div class="chart-container">
+          <canvas id="pieChart"></canvas>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- PROGRESS -->
+
+    <section class="progress-section">
+
+      <div class="progress-card">
+        <div class="progress-title">
+          <span>Farmacêutico</span>
+          <span>80%</span>
+        </div>
+        <div class="progress-bar">
+          <div style="width:80%"></div>
+        </div>
+      </div>
+
+      <div class="progress-card">
+        <div class="progress-title">
+          <span>Pesquisa</span>
+          <span>60%</span>
+        </div>
+        <div class="progress-bar">
+          <div style="width:60%"></div>
+        </div>
+      </div>
+
+      <div class="progress-card">
+        <div class="progress-title">
+          <span>Produção</span>
+          <span>90%</span>
+        </div>
+        <div class="progress-bar">
+          <div style="width:90%"></div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- TABLE -->
+
+    <section class="table-card">
+
+      <div class="table-header">
+        <h3>Estoque Atual</h3>
+        <button onclick="window.location.href='estoque.html'">
+          <span data-i18n="common.verTudo">Ver tudo</span>
+        </button>
+      </div>
+
+      <table>
+
+        <thead>
+          <tr>
+            <th data-i18n="table.produto">Produto</th>
+            <th data-i18n="table.status">Status</th>
+            <th>Crescimento</th>
+          </tr>
+        </thead>
+
+        <tbody id="dashboardStockBody">
+          <!-- Preenchido dinamicamente pelo script.js a partir do data.js -->
+        </tbody>
+
+      </table>
+
+    </section>
+
+  </main>
+
+  <script src="../js/data.js"></script>
+  <script src="../js/script.js"></script>
+
+</body>
+
+</html>
