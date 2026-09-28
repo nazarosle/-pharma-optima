@@ -11,7 +11,7 @@ document.documentElement.style.visibility = "hidden";
 auth.onAuthStateChanged((user) => {
 
   if (!user) {
-    window.location.href = "login.html";
+    window.location.href = "../index.html";
     return;
   }
 
@@ -21,10 +21,14 @@ auth.onAuthStateChanged((user) => {
   const emailEl = document.getElementById("currentUserEmail");
   if (emailEl) emailEl.textContent = user.email;
 
+  // Avisa o script principal que a autenticação terminou.
+  // Isso inicia os listeners do Firestore e os botões de cada página.
+  document.dispatchEvent(new CustomEvent("pharma:authReady"));
+
 });
 
 function logout(){
   auth.signOut().then(() => {
-    window.location.href = "login.html";
+    window.location.href = "../index.html";
   });
 }

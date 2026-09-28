@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pharma Optima | Configurações</title>
+  <link rel="stylesheet" href="../style.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
+  <script src="../js/firebase-config.js"></script>
+  <script src="../js/auth-guard.js"></script>
+</head>
+<body>
+  <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu">
+    <i class="fa-solid fa-bars"></i>
+  </button>
+  <aside class="sidebar" id="sidebar">
+    <div class="logo"><img src="../img/logo.png" alt="Pharma Optima" /></div>
+    <nav>
+      <a href="dashboard.html" data-page="dashboard"><i class="fa-solid fa-chart-line"></i><span data-i18n="nav.dashboard">Dashboard</span></a>
+      <a href="estoque.html" data-page="estoque"><i class="fa-solid fa-boxes-stacked"></i><span data-i18n="nav.estoque">Estoque</span></a>
+      <a href="relatorios.html" data-page="relatorios"><i class="fa-solid fa-chart-pie"></i><span data-i18n="nav.relatorios">Relatórios</span></a>
+      <a href="metas.html" data-page="metas"><i class="fa-solid fa-bullseye"></i><span data-i18n="nav.metas">Metas</span></a>
+      <a href="funcionarios.html" data-page="funcionarios"><i class="fa-solid fa-users"></i><span data-i18n="nav.funcionarios">Funcionários</span></a>
+      <a href="configuracoes.html" data-page="configuracoes"><i class="fa-solid fa-gear"></i><span data-i18n="nav.configuracoes">Configurações</span></a>
+    </nav>
+  </aside>
+  <main class="container">
+    <header class="navbar">
+      <div class="page-title">
+        <h1 data-i18n="page.configuracoes.title">Configurações</h1>
+        <p data-i18n="page.configuracoes.subtitle">Conta, notificações e preferências do sistema</p>
+      </div>
+      <div class="nav-right">
+        <div class="clock" id="clock">00:00</div>
+        <div class="notification"><i class="fa-solid fa-bell"></i><span>3</span></div>
+        <button id="themeBtn" aria-label="Alternar tema claro/escuro">🌙</button>
+        <div class="profile">
+          <img src="../img/manja.jpg" alt="Foto do administrador" />
+          <div class="profile-info"><span>Administrador</span><small id="currentUserEmail">Pharma Optima</small></div>
+        </div>
+        <button id="logoutBtn" onclick="logout()" aria-label="Sair" title="Sair">
+          <i class="fa-solid fa-right-from-bracket"></i>
+        </button>
+      </div>
+    </header>
+
+    <div class="settings-tabs">
+      <button class="settings-tab active" data-tab="perfil">Perfil</button>
+      <button class="settings-tab" data-tab="notificacoes">Notificações</button>
+      <button class="settings-tab" data-tab="seguranca">Segurança</button>
+      <button class="settings-tab" data-tab="sistema">Sistema</button>
+    </div>
+
+    <section class="settings-panel" id="panel-perfil">
+      <div class="settings-card">
+        <h3>Foto e dados pessoais</h3>
+        <div class="settings-profile-row">
+          <img src="../img/manja.jpg" alt="Foto do administrador" class="settings-avatar" />
+          <div><button type="button" class="btn-secondary" id="btnChangePhoto">Alterar foto</button><input type="file" id="photoUpload" accept="image/png,image/jpeg" hidden /><p class="settings-hint">PNG ou JPG, até 2MB</p></div>
+        </div>
+        <div class="settings-grid">
+          <label class="settings-field"><span>Nome completo</span><input type="text" value="Administrador Pharma Optima" /></label>
+          <label class="settings-field"><span>E-mail</span><input type="email" id="settingsEmail" value="" readonly /></label>
+          <label class="settings-field"><span>Cargo</span><input type="text" value="Administrador do sistema" /></label>
+        </div>
+      </div>
+    </section>
+
+    <section class="settings-panel" id="panel-notificacoes" hidden>
+      <div class="settings-card"><h3>Preferências de notificação</h3>
+        <div class="settings-toggle-row"><div><strong>Estoque baixo</strong><p class="settings-hint">Avisar quando um produto atingir o nível mínimo</p></div><label class="switch"><input type="checkbox" checked /><span class="slider"></span></label></div>
+        <div class="settings-toggle-row"><div><strong>Lotes vencendo</strong><p class="settings-hint">Avisar 30 dias antes do vencimento</p></div><label class="switch"><input type="checkbox" checked /><span class="slider"></span></label></div>
+        <div class="settings-toggle-row"><div><strong>Relatórios prontos</strong><p class="settings-hint">Notificar quando um relatório for gerado</p></div><label class="switch"><input type="checkbox" /><span class="slider"></span></label></div>
+      </div>
+    </section>
+
+    <section class="settings-panel" id="panel-seguranca" hidden>
+      <div class="settings-card"><h3>Segurança</h3><p class="settings-hint">A autenticação da conta é administrada pelo Firebase.</p></div>
+    </section>
+
+    <section class="settings-panel" id="panel-sistema" hidden>
+      <div class="settings-card">
+        <h3>Preferências do sistema</h3>
+        <form id="systemSettingsForm">
+          <div class="settings-grid">
+            <label class="settings-field"><span>Tema padrão</span><select id="settingTheme"><option value="dark">Escuro</option><option value="light">Claro</option></select></label>
+            <label class="settings-field"><span>Fuso horário</span><select id="settingTimezone"><option value="America/Sao_Paulo">Brasília (GMT-3)</option><option value="America/Manaus">Manaus (GMT-4)</option></select></label>
+            <label class="settings-field"><span>Idioma</span><select id="settingLanguage"><option value="pt">Português (Brasil)</option><option value="en">English</option><option value="es">Español</option></select></label>
+          </div>
+          <div class="settings-actions"><button type="submit" class="btn-primary">Salvar alterações</button></div>
+        </form>
+      </div>
+    </section>
+  </main>
+  <script>
+    document.addEventListener("pharma:authReady", () => {
+      const email = auth.currentUser && auth.currentUser.email;
+      const field = document.getElementById("settingsEmail");
+      if (field && email) field.value = email;
+    });
+  </script>
+  <script src="../js/data.js"></script>
+  <script src="../js/script.js"></script>
+</body>
+</html>

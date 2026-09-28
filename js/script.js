@@ -223,6 +223,14 @@ function applyTheme(theme){
   document.body.classList.toggle("light", theme === "light");
   const themeBtn = document.getElementById("themeBtn");
   if (themeBtn) themeBtn.textContent = theme === "light" ? "☀️" : "🌙";
+
+  // Troca a logo automaticamente para continuar visível em cada tema.
+  document.querySelectorAll(".logo img").forEach(img => {
+    const src = img.getAttribute("src") || "";
+    img.src = theme === "light"
+      ? src.replace("logoDark.png", "logo.png")
+      : src.replace("logo.png", "logoDark.png");
+  });
 }
 
 function applyPhoto(photoDataUrl){
@@ -444,7 +452,7 @@ function setupProductsPage(){
 
   const addBtn = document.getElementById("btnAddProduct");
 
-  addBtn.addEventListener("click", () => {
+  if (addBtn) addBtn.addEventListener("click", () => {
     form.reset();
     document.getElementById("productId").value = "";
     document.getElementById("productModalTitle").textContent = "Novo produto";
@@ -590,7 +598,7 @@ function setupGoalsPage(){
 
   const addBtn = document.getElementById("btnAddGoal");
 
-  addBtn.addEventListener("click", () => {
+  if (addBtn) addBtn.addEventListener("click", () => {
     form.reset();
     document.getElementById("goalId").value = "";
     document.getElementById("goalModalTitle").textContent = "Nova meta";
@@ -717,7 +725,7 @@ function setupEmployeesPage(){
 
   const addBtn = document.getElementById("btnAddEmployee");
 
-  addBtn.addEventListener("click", () => {
+  if (addBtn) addBtn.addEventListener("click", () => {
     form.reset();
     document.getElementById("employeeId").value = "";
     document.getElementById("employeeModalTitle").textContent = "Novo funcionário";
