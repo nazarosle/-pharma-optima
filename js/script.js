@@ -444,7 +444,7 @@ function setupProductsPage(){
 
   const addBtn = document.getElementById("btnAddProduct");
 
-  addBtn.addEventListener("click", () => {
+  if (addBtn) addBtn.addEventListener("click", () => {
     form.reset();
     document.getElementById("productId").value = "";
     document.getElementById("productModalTitle").textContent = "Novo produto";
@@ -590,7 +590,7 @@ function setupGoalsPage(){
 
   const addBtn = document.getElementById("btnAddGoal");
 
-  addBtn.addEventListener("click", () => {
+  if (addBtn) addBtn.addEventListener("click", () => {
     form.reset();
     document.getElementById("goalId").value = "";
     document.getElementById("goalModalTitle").textContent = "Nova meta";
@@ -717,7 +717,7 @@ function setupEmployeesPage(){
 
   const addBtn = document.getElementById("btnAddEmployee");
 
-  addBtn.addEventListener("click", () => {
+  if (addBtn) addBtn.addEventListener("click", () => {
     form.reset();
     document.getElementById("employeeId").value = "";
     document.getElementById("employeeModalTitle").textContent = "Novo funcionário";
